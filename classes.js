@@ -7,7 +7,7 @@ exports.toString = function (klass) {
     case 3: return 'CH'
     case 4: return 'HS'
     case 255: return 'ANY'
-    case 32769: return 'UNI'
+    case 32769: return 'QU'
   }
   return 'UNKNOWN_' + klass
 }
@@ -19,7 +19,7 @@ exports.toClass = function (name) {
     case 'CH': return 3
     case 'HS': return 4
     case 'ANY': return 255
-    case 'UNI': return 32769
+    case 'QU': return 32769
   }
   return 0
 }
