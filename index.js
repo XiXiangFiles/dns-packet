@@ -1294,10 +1294,7 @@ question.encode = function (q, buf, offset) {
 
   buf.writeUInt16BE(types.toType(q.type), offset)
   offset += 2
-  if(q.QU === undefined || q.QU !== true)
-  	buf.writeUInt16BE(classes.toClass(q.class === undefined ? 'IN' : q.class), offset)
-  else
-  	buf.writeUInt16BE(classes.toClass(q.class === undefined ? 'IN' : q.class)+32768, offset)
+  if (q.QU === undefined || q.QU !== true) { buf.writeUInt16BE(classes.toClass(q.class === undefined ? 'IN' : q.class), offset) } else { buf.writeUInt16BE(classes.toClass(q.class === undefined ? 'IN' : q.class) + 32768, offset) }
 
   offset += 2
 
@@ -1319,13 +1316,11 @@ question.decode = function (buf, offset) {
   q.type = types.toString(buf.readUInt16BE(offset))
   offset += 2
 
-  if(buf.readUInt16BE(offset)-32768 > 0){
-  	classes.toString(buf.readUInt16BE(offset)-32768)
-  	q.QU=true
-  }
-  else
-  	q.class = classes.toString(buf.readUInt16BE(offset))
-  
+  if (buf.readUInt16BE(offset) - 32768 > 0) {
+    classes.toString(buf.readUInt16BE(offset) - 32768)
+    q.QU = true
+  } else { q.class = classes.toString(buf.readUInt16BE(offset)) }
+
   offset += 2
 
   const qu = !!(q.class & QU_MASK)
