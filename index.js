@@ -1283,7 +1283,6 @@ answer.encodingLength = function (a) {
 }
 
 const question = exports.question = {}
-
 question.encode = function (q, buf, offset) {
   if (!buf) buf = Buffer.allocUnsafe(question.encodingLength(q))
   if (!offset) offset = 0
@@ -1295,8 +1294,11 @@ question.encode = function (q, buf, offset) {
 
   buf.writeUInt16BE(types.toType(q.type), offset)
   offset += 2
+  if(q.QU === undefined || q.QU !== true)
+  	buf.writeUInt16BE(classes.toClass(q.class === undefined ? 'IN' : q.class), offset)
+  else
+  	buf.writeUInt16BE(classes.toClass(q.class === undefined ? 'IN' : q.class)+32768, offset)
 
-  buf.writeUInt16BE(classes.toClass(q.class === undefined ? 'IN' : q.class), offset)
   offset += 2
 
   question.encode.bytes = offset - oldOffset
@@ -1317,7 +1319,13 @@ question.decode = function (buf, offset) {
   q.type = types.toString(buf.readUInt16BE(offset))
   offset += 2
 
-  q.class = classes.toString(buf.readUInt16BE(offset))
+  if(buf.readUInt16BE(offset)-32768 > 0){
+  	classes.toString(buf.readUInt16BE(offset)-32768)
+  	q.QU=true
+  }
+  else
+  	q.class = classes.toString(buf.readUInt16BE(offset))
+  
   offset += 2
 
   const qu = !!(q.class & QU_MASK)
