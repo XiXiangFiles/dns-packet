@@ -1440,11 +1440,12 @@ question.decode = function (buf, offset) {
   q.type = types.toString(buf.readUInt16BE(offset))
   offset += 2
 
-  if (buf.readUInt16BE(offset) >= QU_MASK) {
+  const classValue = buf.readUInt16BE(offset)
+  if (classValue >= QU_MASK) {
     q.QU = true
-    q.class = classes.toString(buf.readUInt16BE(offset) - QU_MASK)
+    q.class = classes.toString(classValue - QU_MASK)
   } else {
-    q.class = classes.toString(buf.readUInt16BE(offset))
+    q.class = classes.toString(classValue)
   }
 
   offset += 2
